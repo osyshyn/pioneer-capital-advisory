@@ -1,0 +1,19 @@
+# Environments
+venv/
+.env
+
+# Python
+*/build
+__pycache__/
+*.egg-info/
+.ruff_cache/
+.mypy_cache/
+
+# Logs
+logs
+*.log
+
+# IDE's
+.idea
+.vscode
+

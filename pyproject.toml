@@ -1,0 +1,89 @@
+[tool.setuptools.packages]
+find = { include = ["db", "main"] }
+
+[tool.pyright]
+venvPath = "."
+venv = "venv"
+
+[project]
+name = 'SbaPortal'
+version = "0.0.1"
+
+description = "SbaPortal"
+requires-python = ">=3.11"
+dependencies = [
+    "asyncpg==0.30.0",
+    "sqlalchemy==2.0.36",
+    "alembic==1.14.0",
+    "fastapi==0.115.5",
+    "uvicorn==0.32.0",
+    "dishka==1.4.1",
+    "python-jose==3.3.0",
+    "python-dotenv==1.0.1",
+    "passlib==1.7.4",
+    "typing-extensions==4.12.2",
+    "email-validator==2.2.0",
+    "redis==5.2.1",
+]
+
+[project.optional-dependencies]
+lint = [
+    "ruff==0.7.4",
+    "isort==5.13.2",
+]
+
+[tool.isort]
+multi_line_output = 3
+line_length = 88
+include_trailing_comma = true
+combine_as_imports = true
+remove_redundant_aliases = true
+
+[tool.ruff]
+line-length = 88
+
+[tool.ruff.lint]
+select = ['ALL']
+fixable = [
+    'Q000',
+    'Q001',
+    'COM812',
+    'D400',
+    'PT001',
+]
+ignore = [
+    'D',
+    # Rules emitting false alerts
+    'N804',
+    'B008',
+    'BLE001',
+    'RUF009',
+    'UP035',
+    # Rules that are not applicable in the project for now
+    'TID252',
+    'D104',
+    'ANN',
+    'SLF001',
+    'ARG',
+    'D100',
+    'PLR0913',
+    'TCH002',
+    # Strange and obscure rules that will never be turned on
+    'ANN101',
+    'FA100',
+    'TRY003',
+    'TRY201',
+    'EM',
+    'PERF203',
+    'TCH001',
+    'TD002',
+    'PTH201',
+    'RSE102',
+    # Rules conflictin with other tools
+    'I001',
+    'COM812',
+    'ISC001'
+]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ['F401']
