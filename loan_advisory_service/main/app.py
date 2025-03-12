@@ -3,14 +3,12 @@ from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 import uvicorn
 from loan_advisory_service.main.di import setup_di
-
-
-
-
+from loan_advisory_service.api.root import api_router
 
 
 def get_app() -> FastAPI:
     app = FastAPI()
+    app.include_router(api_router)
     app.add_middleware(
         CORSMiddleware,
         allow_origins=["*"],

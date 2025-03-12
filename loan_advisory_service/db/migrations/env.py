@@ -8,7 +8,7 @@ from alembic import context
 from dotenv import load_dotenv
 from loan_advisory_service.db.models.base import Base
 from loan_advisory_service.main.config import DbConfig
-
+from loan_advisory_service.db.models.users.user import User
 load_dotenv()
 
 # this is the Alembic Config object, which provides

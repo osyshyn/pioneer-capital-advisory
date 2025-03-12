@@ -1,0 +1,17 @@
+Confirm Your Sparkle Account
+
+Hello,
+
+To confirm your email, click the link below:
+{{ link }}
+
+IMPORTANT:
+- This link will expire in {{ expires_in }} hours
+- For security, never share this link with anyone
+- If you didn't request this reset, ignore this email
+
+Need help? Contact our support team.
+
+---
+© 2024 Sparkle - Professional Cleaning Services
+This is an automated message, please do not reply.

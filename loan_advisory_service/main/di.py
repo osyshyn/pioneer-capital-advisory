@@ -5,17 +5,37 @@ from loan_advisory_service.db.setup import (
     get_async_sessionmaker,
     get_engine,
 )
+from redis import Redis
 from loan_advisory_service.main.config import (
     DbConfig,
-    TokenConfig
+    TokenConfig,
+    AppConfig,
+    RedisConfig,
+    EmailConfig
 )
 from loan_advisory_service.main.config import load_config
-
-
+from loan_advisory_service.repositories.perrmision_repository import PermissionRepository
+from loan_advisory_service.repositories.user_repository import UserRepository
+from loan_advisory_service.repositories.role_repository import RoleRepository
+from loan_advisory_service.repositories.survey_repository import SurveyRepository
+from loan_advisory_service.services.auth.utils.password import PasswordProcessor
+from loan_advisory_service.services.auth.utils.token import JwtTokenProcessor
+from loan_advisory_service.services.auth.auth_service import AuthService
+from loan_advisory_service.services.redis_service import get_redis_client, get_redis_pool
+from loan_advisory_service.services.auth.auth_user_provider import AuthUserProvider
+from loan_advisory_service.services.email.email_service import EmailService
+from loan_advisory_service.services.survey_service import SurveyService
+from loan_advisory_service.services.permission_service import PermissionService
+from loan_advisory_service.services.role_service import RoleService
+from loan_advisory_service.services.user_service import UserService
 
 def repository_provider() -> Provider:
     provider = Provider()
 
+    provider.provide(UserRepository, scope=Scope.REQUEST)
+    provider.provide(RoleRepository, scope=Scope.REQUEST)
+    provider.provide(SurveyRepository, scope=Scope.REQUEST)
+    provider.provide(PermissionRepository, scope=Scope.REQUEST)
 
     return provider
 
@@ -33,16 +53,42 @@ def db_provider() -> Provider:
 def service_provider() -> Provider:
     provider = Provider()
 
+    provider.provide(AuthService, scope=Scope.REQUEST)
+    provider.provide(AuthUserProvider, scope=Scope.REQUEST)
+    provider.provide(EmailService, scope=Scope.REQUEST)
+    provider.provide(get_redis_pool, scope=Scope.APP)
+    provider.provide(get_redis_client, scope=Scope.REQUEST, provides=Redis)
+    provider.provide(PermissionService, scope=Scope.REQUEST)
+    provider.provide(SurveyService, scope=Scope.REQUEST)
+    provider.provide(RoleService, scope=Scope.REQUEST)
+    provider.provide(UserService,scope=Scope.REQUEST)
+
     return provider
+
 
 def get_db_config() -> DbConfig:
     config = load_config()
     return config.db
 
+
 def get_token_config() -> TokenConfig:
     config = load_config()
     return config.token
 
+
+def get_app_config() -> AppConfig:
+    config = load_config()
+    return config.app
+
+
+def get_redis_config() -> RedisConfig:
+    config = load_config()
+    return config.redis
+
+
+def get_email_config() -> EmailConfig:
+    config = load_config()
+    return config.email
 
 
 def config_provider() -> Provider:
@@ -50,7 +96,9 @@ def config_provider() -> Provider:
 
     provider.provide(get_db_config, scope=Scope.APP, provides=DbConfig)
     provider.provide(get_token_config, scope=Scope.APP, provides=TokenConfig)
-
+    provider.provide(get_app_config, scope=Scope.APP, provides=AppConfig)
+    provider.provide(get_redis_config, scope=Scope.APP, provides=RedisConfig)
+    provider.provide(get_email_config, scope=Scope.APP, provides=EmailConfig)
 
     return provider
 
@@ -59,6 +107,8 @@ def utils_provider() -> Provider:
     provider = Provider()
 
     provider.from_context(Request, scope=Scope.REQUEST)
+    provider.provide(JwtTokenProcessor, scope=Scope.REQUEST)
+    provider.provide(PasswordProcessor, scope=Scope.REQUEST)
 
     return provider
 
