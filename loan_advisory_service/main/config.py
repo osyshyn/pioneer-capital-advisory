@@ -59,42 +59,42 @@ class TokenConfig:
 
 
 
-# @dataclass
-# class EmailConfig:
-#     host: str
-#     port: int
-#     username: str
-#     password: str
-#     templates_dir: str
-#
-#     @staticmethod
-#     def from_env() -> "EmailConfig":
-#         return EmailConfig(
-#             host=os.getenv("SMTP_HOST"),
-#             port=int(os.getenv("SMTP_PORT")),
-#             username=os.getenv("SMTP_USERNAME"),
-#             password=os.getenv("SMTP_PASSWORD"),
-#             templates_dir=os.getenv("TEMPLATES_DIR"),
-#         )
+@dataclass
+class EmailConfig:
+    host: str
+    port: int
+    username: str
+    password: str
+    templates_dir: str
+
+    @staticmethod
+    def from_env() -> "EmailConfig":
+        return EmailConfig(
+            host=os.getenv("SMTP_HOST"),
+            port=int(os.getenv("SMTP_PORT")),
+            username=os.getenv("SMTP_USERNAME"),
+            password=os.getenv("SMTP_PASSWORD"),
+            templates_dir=os.getenv("TEMPLATES_DIR"),
+        )
 
 
-# @dataclass
-# class AppConfig:
-#     login_url: str
-#     reset_password_url: str
-#     reset_password_ttl: int
-#     success_change_email_url: str
-#     failed_change_email_url: str
-#
-#     @staticmethod
-#     def from_env() -> "AppConfig":
-#         return AppConfig(
-#             login_url=os.getenv("FRONTEND_LOGIN_URL"),
-#             reset_password_url=os.getenv("FRONTEND_RESET_PASSWORD_URL"),
-#             reset_password_ttl=int(os.getenv("RESET_PASSWORD_TTL_MINUTES")),
-#             success_change_email_url=os.getenv("SUCCESS_CHANGE_EMAIL_URL"),
-#             failed_change_email_url=os.getenv("FAILED_CHANGE_EMAIL_URL"),
-#         )
+@dataclass
+class AppConfig:
+    login_url: str
+    reset_password_url: str
+    reset_password_ttl: int
+    success_change_email_url: str
+    failed_change_email_url: str
+
+    @staticmethod
+    def from_env() -> "AppConfig":
+        return AppConfig(
+            login_url=os.getenv("FRONTEND_LOGIN_URL"),
+            reset_password_url=os.getenv("FRONTEND_RESET_PASSWORD_URL"),
+            reset_password_ttl=int(os.getenv("RESET_PASSWORD_TTL_MINUTES")),
+            success_change_email_url=os.getenv("SUCCESS_CHANGE_EMAIL_URL"),
+            failed_change_email_url=os.getenv("FAILED_CHANGE_EMAIL_URL"),
+        )
 
 
 @dataclass
@@ -121,9 +121,9 @@ class RedisConfig:
 class Config:
     db: DbConfig
     token: TokenConfig
-    # email: EmailConfig
-    # app: AppConfig
-    # redis: RedisConfig
+    email: EmailConfig
+    app: AppConfig
+    redis: RedisConfig
 
 
 
@@ -133,8 +133,8 @@ def load_config() -> Config:
     return Config(
         db=DbConfig.from_env(),
         token=TokenConfig.from_env(),
-        # email=EmailConfig.from_env(),
-        # app=AppConfig.from_env(),
-        # redis=RedisConfig.from_env(),
+        email=EmailConfig.from_env(),
+        app=AppConfig.from_env(),
+        redis=RedisConfig.from_env(),
 
     )

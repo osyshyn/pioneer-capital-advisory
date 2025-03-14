@@ -43,27 +43,33 @@ services:
         condition: service_healthy
     networks:
       - loan_advisory.postgres.network
+      - loan_advisory.redis.network
     volumes:
       - ./loan_advisory_service:/loan_advisory_service
-#  redis:
-#    container_name: sparkle.redis
-#    hostname: sparkle.redis
-#    image: "redis:7.4-alpine"
-#    ports:
-#      - "6379:6379"
-#    command: redis-server --save 60 1 --loglevel warning --requirepass ${REDIS_PASSWORD}
-#    healthcheck:
-#      test: ["CMD-SHELL", "redis-cli -a ${REDIS_PASSWORD} ping | grep PONG"]
-#      interval: 1s
-#      timeout: 3s
-#      retries: 5
-#    volumes:
-#      - sparkle.redis.data:/data
-#    networks:
-#      - sparkle.redis.network
+
+  redis:
+    container_name: loan_advisory.redis
+    hostname: loan_advisory.redis
+    image: "redis:7.4-alpine"
+    ports:
+      - "6379:6379"
+    command: redis-server --save 60 1 --loglevel warning --requirepass ${REDIS_PASSWORD}
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli -a ${REDIS_PASSWORD} ping | grep PONG"]
+      interval: 1s
+      timeout: 3s
+      retries: 5
+    volumes:
+      - loan_advisory.redis.data:/data
+    networks:
+      - loan_advisory.redis.network
 
 volumes:
   loan_advisory.postgres.data: {}
+  loan_advisory.redis.data: {}
+
+
 
 networks:
   loan_advisory.postgres.network: {}
+  loan_advisory.redis.network: {}

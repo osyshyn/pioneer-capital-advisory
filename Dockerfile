@@ -1,4 +1,4 @@
-FROM python:3.11-slim as python-base
+FROM python:3.12-slim as python-base
 
 ENV VIRTUAL_ENV=/venv
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
