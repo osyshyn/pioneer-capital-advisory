@@ -7,3 +7,5 @@ from .users.user_role import UserRole
 from .admin.question_group import QuestionGroup
 from .admin.question import Question
 from .admin.answer_option import AnswerOption
+from .user_answer import Answer
+from .request import Request
