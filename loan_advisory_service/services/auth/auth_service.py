@@ -44,6 +44,9 @@ class AuthService:
         if await self.user_repository.get_by_email(data.email):
             raise HTTPException(status_code=409, detail="Email already registered")
         user = User(
+            phone_number = data.phone_number,
+            first_name = data.first_name,
+            last_name = data.last_name,
             email=data.email,
             hashed_password=self.password_processor.hash(data.password),
         )

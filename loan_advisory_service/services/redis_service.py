@@ -6,7 +6,7 @@ def get_redis_pool(config: RedisConfig) -> ConnectionPool:
     return ConnectionPool(
         host=config.host,
         port=config.port,
-        password=None if config.password is not None else config.password,
+        password=config.password,
         decode_responses=True,
     )
 

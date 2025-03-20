@@ -56,9 +56,6 @@ class TokenConfig:
         )
 
 
-
-
-
 @dataclass
 class EmailConfig:
     host: str
@@ -112,9 +109,26 @@ class RedisConfig:
         )
 
 
+@dataclass
+class BoxConfig:
+    file_path: str
+
+    @staticmethod
+    def from_env() -> "BoxConfig":
+        return BoxConfig(
+            file_path=os.getenv("BOX_FILE_PATH"),
+        )
 
 
+@dataclass
+class PipeDriveConfig:
+    api_token: str
 
+    @staticmethod
+    def from_env() -> "PipeDriveConfig":
+        return PipeDriveConfig(
+            api_token=os.getenv("PIPE_DRIVE_API_TOKEN"),
+        )
 
 
 @dataclass
@@ -124,7 +138,8 @@ class Config:
     email: EmailConfig
     app: AppConfig
     redis: RedisConfig
-
+    box: BoxConfig
+    pipe_drive: PipeDriveConfig
 
 
 def load_config() -> Config:
@@ -136,5 +151,6 @@ def load_config() -> Config:
         email=EmailConfig.from_env(),
         app=AppConfig.from_env(),
         redis=RedisConfig.from_env(),
-
+        box=BoxConfig.from_env(),
+        pipe_drive=PipeDriveConfig.from_env()
     )

@@ -21,3 +21,4 @@ COPY --from=builder $VIRTUAL_ENV $VIRTUAL_ENV
 
 COPY loan_advisory_service /loan_advisory_service/
 COPY alembic.ini .
+COPY 1280173589_j7ukhvm5_config.json .

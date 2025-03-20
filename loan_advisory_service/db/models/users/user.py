@@ -8,9 +8,10 @@ class User(Base):
     __tablename__ = "users"
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    full_name: Mapped[str] = mapped_column(String(255), nullable=True)
+    first_name: Mapped[str] = mapped_column(String(255), nullable=False)
+    last_name: Mapped[str] = mapped_column(String(255), nullable=False)
+    phone_number: Mapped[str] = mapped_column(String(15), nullable=False)
     email: Mapped[str] = mapped_column(String(255), unique=True)
-    phone_number: Mapped[str] = mapped_column(String(15), nullable=True)
     hashed_password: Mapped[str] = mapped_column(String(255))
     is_active: Mapped[bool | None] = mapped_column(default=False)
 
@@ -20,5 +21,5 @@ class User(Base):
     roles = relationship("Role", secondary="user_roles", back_populates="users")
     answers: Mapped[list["Answer"]] = relationship("Answer", back_populates="user", cascade="all, delete",
                                                    passive_deletes=True)
-    requests: Mapped[list["Request"]] = relationship("Request", back_populates="user",cascade="all, delete",
-                                                   passive_deletes=True)
+    request: Mapped["Request"] = relationship("Request", back_populates="user", cascade="all, delete",
+                                              passive_deletes=True)
