@@ -20,7 +20,8 @@ from loan_advisory_service.repositories.perrmision_repository import PermissionR
 from loan_advisory_service.repositories.user_repository import UserRepository
 from loan_advisory_service.repositories.role_repository import RoleRepository
 from loan_advisory_service.repositories.survey_repository import SurveyRepository
-
+from loan_advisory_service.repositories.user_answer_repository import UserAnswersRepository
+from loan_advisory_service.repositories.request_repository import RequestRepository
 from loan_advisory_service.services.auth.utils.password import PasswordProcessor
 from loan_advisory_service.services.auth.utils.token import JwtTokenProcessor
 from loan_advisory_service.services.auth.auth_service import AuthService
@@ -36,6 +37,9 @@ from loan_advisory_service.services.permission_service import PermissionService
 from loan_advisory_service.services.role_service import RoleService
 from loan_advisory_service.services.user_service import UserService
 from loan_advisory_service.services.pipe_drive_service import PipeDriveService
+from loan_advisory_service.services.request_service import RequestService
+from loan_advisory_service.services.box_service import BoxService
+
 
 def repository_provider() -> Provider:
     provider = Provider()
@@ -44,8 +48,8 @@ def repository_provider() -> Provider:
     provider.provide(RoleRepository, scope=Scope.REQUEST)
     provider.provide(SurveyRepository, scope=Scope.REQUEST)
     provider.provide(PermissionRepository, scope=Scope.REQUEST)
-
-
+    provider.provide(UserAnswersRepository, scope=Scope.REQUEST)
+    provider.provide(RequestRepository, scope=Scope.REQUEST)
     return provider
 
 
@@ -72,6 +76,8 @@ def service_provider() -> Provider:
     provider.provide(RoleService, scope=Scope.REQUEST)
     provider.provide(UserService, scope=Scope.REQUEST)
     provider.provide(PipeDriveService, scope=Scope.REQUEST)
+    provider.provide(RequestService, scope=Scope.REQUEST)
+    provider.provide(BoxService, scope=Scope.REQUEST)
     return provider
 
 
