@@ -1,11 +1,13 @@
+from dishka.integrations.fastapi import DishkaRoute, FromDishka
+from fastapi import APIRouter, Request, Response, UploadFile, File
 from loan_advisory_service.api.utils.security import bearer
 from loan_advisory_service.schemas.permission import UserPermissionResponse
 from loan_advisory_service.services.auth.auth_user_provider import AuthUserProvider
 from loan_advisory_service.repositories.user_repository import UserRepository
-from dishka.integrations.fastapi import DishkaRoute, FromDishka
-from fastapi import APIRouter, Request, Response, UploadFile, File
+from loan_advisory_service.services.box_service import BoxService
 
 import requests
+
 user_router = APIRouter(prefix="/user", route_class=DishkaRoute, tags=["USER"])
 
 
@@ -25,9 +27,6 @@ async def get_permissions(auth_provider: FromDishka[AuthUserProvider], user_repo
             )
 
     return permissions
-
-
-
 
 
 # @user_router.get('/upload_file', dependencies=[bearer])

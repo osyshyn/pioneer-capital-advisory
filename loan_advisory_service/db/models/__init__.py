@@ -10,3 +10,5 @@ from .admin.answer_option import AnswerOption
 from .user_answer import Answer
 from .request import Request
 from .user_request import UserRequest
+from .notifications import Notification
+from .notifications import NotificationUser

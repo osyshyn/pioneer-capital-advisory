@@ -25,3 +25,6 @@ class User(Base):
     request: Mapped[list["Request"]] = relationship(
         "Request", secondary="user_requests", back_populates="users"
     )
+    notifications: Mapped[list["Notification"]] = relationship(
+        secondary="notification_users", back_populates="users"
+    )

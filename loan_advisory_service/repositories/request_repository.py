@@ -17,3 +17,13 @@ class RequestRepository(BaseRepository):
         self.session.add(user_request)
         await self.session.commit()
         return new_request
+
+    async def add_user_to_request(self, request_id: int, user_id: int)->None:
+        user_request = UserRequest(user_id=user_id, request_id=request_id)
+        self.session.add(user_request)
+        await self.session.commit()
+
+    async def get_existing_request_id(self, user_id: int) -> int | None:
+        query = select(UserRequest).where(UserRequest.user_id == user_id)
+        result = await self.session.execute(query)
+        return result.scalars().first()

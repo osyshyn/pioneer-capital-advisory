@@ -1,8 +1,4 @@
-from sqlalchemy import select
-from sqlalchemy.orm import joinedload, selectinload
-from sqlalchemy.ext.asyncio import AsyncSession
 from loan_advisory_service.main.config import PipeDriveConfig
-from loan_advisory_service.repositories.base_repository import BaseRepository
 import aiohttp
 from aiohttp import ClientSession
 

@@ -13,6 +13,11 @@ class QuestionTypeEnum(str, Enum):
     phone_number = "phone_number"
 
 
+class QuestionCategoryEnum(str, Enum):
+    main = "main"
+    personal = "personal"
+
+
 class Question(Base):
     __tablename__ = "questions"
 
@@ -21,7 +26,9 @@ class Question(Base):
     sub_text: Mapped[str] = mapped_column(String, nullable=True)
     type: Mapped[QuestionTypeEnum] = mapped_column(nullable=False)
     is_required: Mapped[bool] = mapped_column(default=True)
-
+    category: Mapped[QuestionCategoryEnum] = mapped_column(String, nullable=False,
+                                                           default=QuestionCategoryEnum.main)
+    is_editable:Mapped[bool] = mapped_column(default=True)
     order: Mapped[int] = mapped_column(Integer, nullable=False)
     group_id: Mapped[int] = mapped_column(ForeignKey("question_groups.id", ondelete="CASCADE"))
 

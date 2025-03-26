@@ -1,0 +1,10 @@
+You're Invited!
+
+Hello,
+
+We invite you to complete your application. Click the link below to get started:
+
+{{ link }}
+
+Best regards,
+SBA LOAN

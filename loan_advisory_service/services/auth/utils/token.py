@@ -14,6 +14,7 @@ class TokenTypeEnum(str, Enum):
     ACCESS = "access"
     REFRESH = "refresh"
     VERIFICATION = "verification"
+    REDIRECT = "redirect"
 
 
 class JwtTokenProcessor:
@@ -21,13 +22,13 @@ class JwtTokenProcessor:
         self.config = config
 
     def _create_token(
-        self,
-        sub: int,
-        token_type: TokenTypeEnum,
-        user_roles: list[str],
-        expire_delta: timedelta,
-        algorithm: str,
-        secret: str,
+            self,
+            sub: int,
+            token_type: TokenTypeEnum,
+            user_roles: list[str],
+            expire_delta: timedelta,
+            algorithm: str,
+            secret: str,
     ) -> str:
         to_encode = {
             "sub": sub,
@@ -38,11 +39,11 @@ class JwtTokenProcessor:
         return jwt.encode(claims=to_encode, key=secret, algorithm=algorithm)
 
     def decode_token(
-        self,
-        token: str,
-        token_type: TokenTypeEnum,
-        secret: str,
-        algorithm: str,
+            self,
+            token: str,
+            token_type: TokenTypeEnum,
+            secret: str,
+            algorithm: str,
     ) -> TokenPayload:
         try:
             payload = jwt.decode(token=token, key=secret, algorithms=[algorithm])
@@ -77,7 +78,7 @@ class JwtTokenProcessor:
     def create_refresh_token(self, user_id: int, user_roles: list[str]) -> str:
         return self._create_token(
             sub=str(user_id),
-            user_roles= user_roles,
+            user_roles=user_roles,
             token_type=TokenTypeEnum.REFRESH,
             expire_delta=timedelta(days=self.config.refresh_expire_days),
             algorithm=self.config.refresh_algorithm,
@@ -106,7 +107,7 @@ class JwtTokenProcessor:
             raise HTTPException(status_code=401, detail="Token has expired")
 
     def create_verification_token(
-        self, user_id: int, user_roles: list[str]
+            self, user_id: int, user_roles: list[str]
     ) -> VerificationToken:
         token = self._create_token(
             sub=str(user_id),
@@ -127,6 +128,29 @@ class JwtTokenProcessor:
             secret=self.config.verification_secret,
             algorithm=self.config.verification_algorithm,
         )
+
+    def create_redirect_token(self, request_id: int) -> str:
+        to_encode = {
+            "sub": str(request_id),
+            "token_type": TokenTypeEnum.REDIRECT,
+            "exp": datetime.now(UTC) + timedelta(days=self.config.refresh_expire_days),
+        }
+        return jwt.encode(claims=to_encode, key=self.config.redirect_secret, algorithm=self.config.redirect_algorithm)
+
+    def validate_redirect_token(self, token: str) -> int:
+        try:
+            payload = jwt.decode(token=token, key=self.config.redirect_secret,
+                                 algorithms=[self.config.redirect_algorithm])
+        except ExpiredSignatureError:
+            raise HTTPException(status_code=401, detail="Token has expired")
+        except JWTError:
+            raise HTTPException(status_code=401, detail="Invalid token")
+
+        if payload.get("token_type") != TokenTypeEnum.REDIRECT:
+            raise HTTPException(status_code=401, detail="Invalid token type")
+
+        self._validate_expiration(payload)
+        return int(payload['sub'])
 
     def create_urlsafe_token(self) -> str:
         return secrets.token_urlsafe(32)

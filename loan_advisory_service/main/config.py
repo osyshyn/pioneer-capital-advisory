@@ -41,6 +41,9 @@ class TokenConfig:
     verification_algorithm: str
     verification_expire_hours: int
 
+    redirect_secret: bytes
+    redirect_algorithm: str
+
     @staticmethod
     def from_env() -> "TokenConfig":
         return TokenConfig(
@@ -53,6 +56,9 @@ class TokenConfig:
             verification_secret=os.getenv("VERIFICATION_SECRET").encode(),
             verification_algorithm=os.getenv("VERIFICATION_ALGORITHM"),
             verification_expire_hours=int(os.getenv("VERIFICATION_EXPIRE_HOURS")),
+            redirect_secret=os.getenv('REDIRECT_SECRET').encode(),
+            redirect_algorithm=os.getenv('REDIRECT_ALGORITHM')
+
         )
 
 
@@ -82,6 +88,7 @@ class AppConfig:
     reset_password_ttl: int
     success_change_email_url: str
     failed_change_email_url: str
+    apply_link_url: str
 
     @staticmethod
     def from_env() -> "AppConfig":
@@ -91,6 +98,7 @@ class AppConfig:
             reset_password_ttl=int(os.getenv("RESET_PASSWORD_TTL_MINUTES")),
             success_change_email_url=os.getenv("SUCCESS_CHANGE_EMAIL_URL"),
             failed_change_email_url=os.getenv("FAILED_CHANGE_EMAIL_URL"),
+            apply_link_url=os.getenv('FRONTEND_APPLY_REQUEST_LINK')
         )
 
 

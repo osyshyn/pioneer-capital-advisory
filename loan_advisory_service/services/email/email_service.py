@@ -74,6 +74,17 @@ class EmailService:
             subject="Confirm email changing",
         )
 
+    async def send_apply_link(self, to_email: str, link: str):
+        html_content, text_content = await self._render_template(
+            context={"link": link},
+            template_name="invite_to_apply",
+        )
+        return await self._send_email(
+            to_email=to_email,
+            html=html_content,
+            text=text_content,
+            subject="Invite to request",
+        )
 
     async def _send_email(self, to_email, html: str, text: str, subject: str) -> None:
         message = MIMEMultipart("alternative")

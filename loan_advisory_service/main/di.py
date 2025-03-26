@@ -39,6 +39,7 @@ from loan_advisory_service.services.user_service import UserService
 from loan_advisory_service.services.pipe_drive_service import PipeDriveService
 from loan_advisory_service.services.request_service import RequestService
 from loan_advisory_service.services.box_service import BoxService
+from loan_advisory_service.services.web_socket_service import WebsocketService
 
 
 def repository_provider() -> Provider:
@@ -78,6 +79,7 @@ def service_provider() -> Provider:
     provider.provide(PipeDriveService, scope=Scope.REQUEST)
     provider.provide(RequestService, scope=Scope.REQUEST)
     provider.provide(BoxService, scope=Scope.REQUEST)
+    provider.provide(WebsocketService, scope=Scope.APP)
     return provider
 
 

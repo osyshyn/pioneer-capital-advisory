@@ -1,3 +1,5 @@
+from datetime import datetime
+from sqlalchemy import DateTime, func
 from sqlalchemy import ForeignKey, Integer, String
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 from loan_advisory_service.db.models.base import Base
@@ -17,12 +19,21 @@ class RequestStatus(str, enum.Enum):
     funded = "Funded"
 
 
+class RequestType(str, enum.Enum):
+    SOLO = 'solo'
+    GROUP = 'group'
+
+
 class Request(Base):
     __tablename__ = "requests"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     status: Mapped[str] = mapped_column(String, nullable=False, default=RequestStatus.pre_loi.value)
-
+    request_type: Mapped[RequestType] = mapped_column(String, nullable=False, default=RequestType.SOLO)
+    count_of_users: Mapped[int] = mapped_column(Integer, nullable=True)
+    end_date: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
     users: Mapped[list["User"]] = relationship(
         "User", secondary="user_requests", back_populates="request"
     )
